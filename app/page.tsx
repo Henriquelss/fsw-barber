@@ -6,10 +6,13 @@ import Image from "next/image"
 import { Card, CardContent } from "./_components/ui/card"
 import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
+import { db } from "./_lib/prisma"
+import BarbershopItem from "./_components/barbershop-item"
 
-const Home = () => {
+const Home = async () => {
+  const barbershops = await db.barbershop.findMany()
   return (
-    <div>
+    <>
       <Header />
       <div className="p-5">
         <h2 className="fonte-bold text-xl">Olá, Henrique</h2>
@@ -24,13 +27,19 @@ const Home = () => {
         <div className="relative mt-6 h-37.5 w-full">
           <Image
             src="/banner01.png"
+            loading="eager"
             fill
             className="rounded-xl object-cover"
             alt="Agende nos melhores com fsw "
           />
         </div>
         <div>
-          <Card className="mt-6">
+          {/* Agendamento */}
+          <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+            Agendamentos
+          </h2>
+
+          <Card>
             <CardContent className="flex justify-between p-0">
               {/* Esquerda */}
               <div className="flex flex-col gap-2 py-5 pl-5">
@@ -47,14 +56,23 @@ const Home = () => {
               {/* Direita */}
               <div className="flex flex-col items-center justify-center border-l-2 border-solid px-5">
                 <p className="font-sm">Fevereiro</p>
-                <p className="font-bold">06</p>
+                <p className="text-2xl">06</p>
                 <p className="font-sm">09:45</p>
               </div>
             </CardContent>
           </Card>
+
+          <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+            Recomendados
+          </h2>
+          <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+            {barbershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
