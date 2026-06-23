@@ -11,8 +11,14 @@ import BarbershopItem from "./_components/barbershop-item"
 
 const Home = async () => {
   const barbershops = await db.barbershop.findMany()
+  const popularBarbershops = await db.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+    take: 5,
+  })
   return (
-    <>
+    <div>
       <Header />
       <div className="p-5">
         <h2 className="fonte-bold text-xl">Olá, Henrique</h2>
@@ -24,15 +30,50 @@ const Home = async () => {
             <SearchIcon />
           </Button>
         </div>
+        {/* Busca rápida */}
+
+        <div className="mt-6 flex gap-3 overflow-auto [&::-webkit-scrollbar]:hidden">
+          <Button className="flex cursor-pointer gap-2" variant="secondary">
+            <Image src="/cabelo.svg" alt="Cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+
+          <Button className="flex cursor-pointer gap-2" variant="secondary">
+            <Image src="/barba.svg" alt="Barba" width={16} height={16} />
+            Barba
+          </Button>
+
+          <Button className="flex cursor-pointer gap-2" variant="secondary">
+            <Image
+              src="/acabamento.svg"
+              alt="Acabamento"
+              width={16}
+              height={16}
+            />
+            Acabamento
+          </Button>
+
+          <Button className="flex cursor-pointer gap-2" variant="secondary">
+            <Image src="/cabelo.svg" alt="Cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+
+          <Button className="flex cursor-pointer gap-2" variant="secondary">
+            <Image src="/cabelo.svg" alt="Cabelo" width={16} height={16} />
+            Cabelo
+          </Button>
+        </div>
+
         <div className="relative mt-6 h-37.5 w-full">
           <Image
-            src="/banner01.png"
+            src="/banner01.svg"
             loading="eager"
             fill
             className="rounded-xl object-cover"
             alt="Agende nos melhores com fsw "
           />
         </div>
+
         <div>
           {/* Agendamento */}
           <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
@@ -65,14 +106,34 @@ const Home = async () => {
           <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
             Recomendados
           </h2>
+
           <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
             {barbershops.map((barbershop) => (
               <BarbershopItem key={barbershop.id} barbershop={barbershop} />
             ))}
           </div>
+
+          <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
+            Populares
+          </h2>
+
+          <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+            {popularBarbershops.map((barbershop) => (
+              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+            ))}
+          </div>
         </div>
       </div>
-    </>
+      <footer>
+        <Card>
+          <CardContent className="px-5 py-6">
+            <p className="text-sm text-gray-400">
+              © 2023 Copyright <span className="font-bold">FSW Barber</span>
+            </p>
+          </CardContent>
+        </Card>
+      </footer>
+    </div>
   )
 }
 
