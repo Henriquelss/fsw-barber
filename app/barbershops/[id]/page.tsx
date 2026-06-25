@@ -4,6 +4,7 @@ import Image from "next/image"
 import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import ServiceItem from "@/app/_components/service-item"
 
 interface BarberShopPageProps {
   params: Promise<{
@@ -17,6 +18,9 @@ const BarbershopPage = async ({ params }: BarberShopPageProps) => {
   const barbershop = await db.barbershop.findUnique({
     where: {
       id: id,
+    },
+    include: {
+      barbershopServices: true,
     },
   })
 
@@ -70,12 +74,17 @@ const BarbershopPage = async ({ params }: BarberShopPageProps) => {
       </div>
 
       <div className="space-y-2 border-b border-solid p-5">
-        <h2 className="text-sm font-bold text-gray-400 uppercase">Sobre nós</h2>
+        <h2 className="text-xs font-bold text-gray-400 uppercase">Sobre nós</h2>
         <p className="text-justify text-sm">{barbershop?.description}</p>
       </div>
 
-      <div className="p-5">
-        <h3>Serviços</h3>
+      <div className="space-y-3 p-5">
+        <h2 className="text-xs font-bold text-gray-400 uppercase">Serviços</h2>
+        <div className="space-y-3">
+          {barbershop.barbershopServices.map((service) => (
+            <ServiceItem key={service.id} service={service} />
+          ))}
+        </div>
       </div>
     </div>
   )
